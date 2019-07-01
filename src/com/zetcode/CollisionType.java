@@ -7,158 +7,89 @@ import java.util.ArrayList;
  */
 public abstract class CollisionType {
     final int SPACE = 20;
-    public abstract boolean checkWallCollision(Actor actorInitial, ArrayList<Wall> walls);
-    public abstract boolean checkBagCollision(Actor actorInitial, ArrayList<Baggage> baggages, ArrayList<Wall> walls);
-}
-class LeftCollision extends CollisionType{
+    public abstract boolean checkActorCollision(Actor actorInitial, Actor actorToCheckColisionWith);
+    public abstract  void moveBag(Baggage baggage);
 
-    @Override
-    public boolean checkWallCollision(Actor actorInitial, ArrayList<Wall> walls) {
-        for (Wall wall : walls) {
-
-            if (actorInitial.isLeftCollision(wall)) {
-
+    public boolean checkCollision(Actor actorInitial, ArrayList<Actor> actors) {
+        for (Actor actorTest : actors) {
+            if (checkActorCollision(actorInitial,actorTest))
                 return true;
-            }
         }
-        return false;    }
-
-    @Override
+        return false;
+    }
     public boolean checkBagCollision(Actor actorInitial, ArrayList<Baggage> baggages, ArrayList<Wall> walls) {
         for (Baggage baggage : baggages) {
-            if (actorInitial.isLeftCollision(baggage)) {
+            if (checkActorCollision(actorInitial,baggage)) {
 
                 for (Baggage testBaggage : baggages) {
 
                     if (!baggage.equals(testBaggage)) {
 
-                        if (baggage.isLeftCollision(testBaggage)) {
+                        if(checkActorCollision(baggage,testBaggage))
                             return true;
-                        }
-                    }
-
-                    if (checkWallCollision(baggage,walls)) {
-                        return true;
                     }
                 }
-
-                baggage.move(-SPACE, 0);
-            }
-        }
-        return false;        }
-}
-class RightCollision extends CollisionType{
-
-    @Override
-    public boolean checkWallCollision(Actor actorInitial, ArrayList<Wall> walls) {
-        for (Wall wall : walls) {
-
-            if (actorInitial.isRightCollision(wall)) {
-
-                return true;
-            }
-        }
-        return false;    }
-
-    @Override
-    public boolean checkBagCollision(Actor actorInitial, ArrayList<Baggage> baggages, ArrayList<Wall> walls) {
-        for (Baggage baggage : baggages) {
-            if (actorInitial.isRightCollision(baggage)) {
-
-                for (Baggage testBaggage : baggages) {
-
-                    if (!baggage.equals(testBaggage)) {
-
-                        if (baggage.isRightCollision(testBaggage)) {
-                            return true;
-                        }
-                    }
-
-                    if (checkWallCollision(baggage,walls)) {
-                        return true;
-                    }
+                ArrayList<Actor> wallActors = new ArrayList<Actor>(walls);
+                if (checkCollision(baggage,wallActors)) {
+                    return true;
                 }
-
-                baggage.move(SPACE, 0);
-            }
-        }
-        return false;    }
-}
-class TopCollision extends CollisionType{
-
-    @Override
-    public boolean checkWallCollision(Actor actorInitial, ArrayList<Wall> walls) {
-        for (Wall wall : walls) {
-
-            if (actorInitial.isTopCollision(wall)) {
-
-                return true;
+                //fair bouger les bag de le sens correct (polymorphysm)
+                moveBag(baggage);
             }
         }
         return false;
     }
+}
+class LeftCollision extends CollisionType{
 
     @Override
-    public boolean checkBagCollision(Actor actorInitial, ArrayList<Baggage> baggages, ArrayList<Wall> walls) {
-        for (Baggage bag : baggages) {
-            if (actorInitial.isTopCollision(bag)) {
+    public boolean checkActorCollision(Actor actorInitial, Actor actorToCheckColisionWith) {
 
-                for (Baggage item : baggages) {
+        return actorInitial.isLeftCollision(actorToCheckColisionWith);
+    }
 
-                    if (!bag.equals(item)) {
+    @Override
+    public void moveBag(Baggage baggage) {
+        baggage.move(-SPACE, 0);
 
-                        if (bag.isTopCollision(item)) {
-                            return true;
-                        }
-                    }
+    }
+}
+class RightCollision extends CollisionType{
 
-                    if (checkWallCollision(bag,walls)) {
-                        return true;
-                    }
-                }
+    @Override
+    public boolean checkActorCollision(Actor actorInitial, Actor actorToCheckColisionWith) {
+        return actorInitial.isRightCollision(actorToCheckColisionWith);
 
-                bag.move(0, -SPACE);
-            }
-        }
-        return false;
+    }
+
+    @Override
+    public void moveBag(Baggage baggage) {
+        baggage.move(SPACE, 0);
+    }
+}
+class TopCollision extends CollisionType{
+
+    @Override
+    public boolean checkActorCollision(Actor actorInitial, Actor actorToCheckColisionWith) {
+
+        return actorInitial.isTopCollision(actorToCheckColisionWith);
+    }
+
+    @Override
+    public void moveBag(Baggage baggage) {
+        baggage.move(0, -SPACE);
     }
 }
 class BottomCollision extends CollisionType{
 
     @Override
-    public boolean checkWallCollision(Actor actorInitial, ArrayList<Wall> walls) {
-        for (Wall wall : walls) {
-
-            if (actorInitial.isBottomCollision(wall)) {
-
-                return true;
-            }
-        }
-        return false;
+    public boolean checkActorCollision(Actor actorInitial, Actor actorToCheckColisionWith) {
+        return actorInitial.isBottomCollision(actorToCheckColisionWith);
     }
 
     @Override
-    public boolean checkBagCollision(Actor actorInitial, ArrayList<Baggage> baggages, ArrayList<Wall> walls) {
-        for (Baggage baggage : baggages) {
-            if (actorInitial.isBottomCollision(baggage)) {
+    public void moveBag(Baggage baggage) {
+        baggage.move(0, SPACE);
 
-                for (Baggage testBaggage : baggages) {
-
-                    if (!baggage.equals(testBaggage)) {
-
-                        if (baggage.isBottomCollision(testBaggage)) {
-                            return true;
-                        }
-                    }
-
-                    if (checkWallCollision(baggage,walls)) {
-                        return true;
-                    }
-                }
-
-                baggage.move(0, SPACE);
-            }
-        }
-        return false;
     }
 }

@@ -190,6 +190,7 @@ public class Board extends JPanel {
         @Override
         public void keyPressed(KeyEvent e) {
             collision = new Collision();
+            boolean isNotRestart=true;
             if (isCompleted) {
                 return;
             }
@@ -225,7 +226,7 @@ public class Board extends JPanel {
                     break;
 
                 case KeyEvent.VK_R:
-
+                    isNotRestart = false;
                     restartLevel();
 
                     break;
@@ -233,18 +234,21 @@ public class Board extends JPanel {
                 default:
                     break;
             }
-            if (collision.getType().checkWallCollision(sokoPlayer,
-                    walls)) {
-                return;
-            }
+            ArrayList<Actor> wallActors = new ArrayList<Actor>(walls);
+            if(isNotRestart) {
+                if (collision.getType().checkCollision(sokoPlayer,
+                        wallActors)) {
+                    return;
+                }
 
-            if (collision.getType().checkBagCollision(sokoPlayer,baggages,walls)) {
-                return;
-            }
+                if (collision.getType().checkBagCollision(sokoPlayer, baggages, walls)) {
+                    return;
+                }
 
-            sokoPlayer.move(dx, dy);
-            isCompleted();
-            repaint();
+                sokoPlayer.move(dx, dy);
+                isCompleted();
+                repaint();
+            }
         }
     }
 }
