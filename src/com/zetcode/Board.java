@@ -190,52 +190,17 @@ public class Board extends JPanel {
         @Override
         public void keyPressed(KeyEvent e) {
             collision = new Collision();
-            boolean isNotRestart=true;
+
             if (isCompleted) {
                 return;
             }
 
             int key = e.getKeyCode();
-            int dx = 0;
-            int dy = 0;
-
-            switch (key) {
-
-                case KeyEvent.VK_LEFT:
-                    int LEFT_COLLISION = 1;
-                    collision.setType(LEFT_COLLISION);
-                    dx = -SPACE;
-                    break;
-
-                case KeyEvent.VK_RIGHT:
-                    int RIGHT_COLLISION = 2;
-                    collision.setType(RIGHT_COLLISION);
-                    dx = SPACE;
-                    break;
-
-                case KeyEvent.VK_UP:
-                    int TOP_COLLISION = 3;
-                    collision.setType(TOP_COLLISION);
-                    dy = -SPACE;
-                    break;
-
-                case KeyEvent.VK_DOWN:
-                    int BOTTOM_COLLISION = 4;
-                    collision.setType(BOTTOM_COLLISION);
-                    dy = SPACE;
-                    break;
-
-                case KeyEvent.VK_R:
-                    isNotRestart = false;
+            if(key == KeyEvent.VK_R){
                     restartLevel();
-
-                    break;
-
-                default:
-                    break;
-            }
-            ArrayList<Actor> wallActors = new ArrayList<Actor>(walls);
-            if(isNotRestart) {
+            }else {
+                int[] dShift = collision.setType(key);
+                ArrayList<Actor> wallActors = new ArrayList<Actor>(walls);
                 if (collision.getType().checkCollision(sokoPlayer,
                         wallActors)) {
                     return;
@@ -244,7 +209,8 @@ public class Board extends JPanel {
                 if (collision.getType().checkBagCollision(sokoPlayer, baggages, walls)) {
                     return;
                 }
-
+                int dx = dShift[0];
+                int dy = dShift[1];
                 sokoPlayer.move(dx, dy);
                 isCompleted();
                 repaint();
