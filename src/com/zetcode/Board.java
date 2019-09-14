@@ -18,9 +18,6 @@ public class Board extends JPanel {
     private int boardWidth = 0;
     private int boardHeight = 0;
 
-    //nouvel variable collision
-    private Collision collision;
-    
     private boolean isCompleted = false;
 
     Board() {
@@ -56,7 +53,8 @@ public class Board extends JPanel {
         Baggage baggage;
         Area area;
 
-        Level level = new Level() ;
+        //changer le level ici
+        Level level = new Level(1) ;
 
         for (int i = 0; i < level.mapLength(); i++) {
             //caractere sur la ieme position
@@ -189,12 +187,11 @@ public class Board extends JPanel {
 
         @Override
         public void keyPressed(KeyEvent e) {
-            collision = new Collision();
+            Collision collision = new Collision();
 
             if (isCompleted) {
                 return;
             }
-
             int key = e.getKeyCode();
             if(key == KeyEvent.VK_R){
                     restartLevel();

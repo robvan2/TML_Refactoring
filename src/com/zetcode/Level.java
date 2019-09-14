@@ -5,24 +5,32 @@ package com.zetcode;
  */
 public class Level {
     private String map;
-//    private final char wall ='#';
-//    private final char area ='.';
-//    private final char baggage ='$';
-//    private final char space =' ';
-//    private final char line ='\n';
 
-    public Level() {
-        map ="    ######\n"
-                + "    ##   #\n"
-                + "    ##$  #\n"
-                + "  ####  $##\n"
-                + "  ##  $ $ #\n"
-                + "#### # ## #   ######\n"
-                + "##   # ## #####  ..#\n"
-                + "## $  $          ..#\n"
-                + "###### ### #@##  ..#\n"
-                + "    ##     #########\n"
-                + "    ########\n";
+    //en peur creer une table 'BDD' qui contien tout les level puis fais un query avec l ID du niveau 'map'
+    public Level(int map) {
+        if (map == 1){
+            this.map ="    ######\n"
+                    + "    ##   #\n"
+                    + "    ##$  #\n"
+                    + "  ####  $##\n"
+                    + "  ##  $ $ #\n"
+                    + "#### # ## #   ######\n"
+                    + "##   # ## #####  ..#\n"
+                    + "## $  $          ..#\n"
+                    + "###### ### #@##  ..#\n"
+                    + "    ##     #########\n"
+                    + "    ########\n";
+        }else{
+            this.map = "  #####\n"
+                    +     "###   #\n"
+                    +     "#.@$  #\n"
+                    +     "### $.#\n"
+                    +     "#.##$ #\n"
+                    +     "# # . ##\n"
+                    +     "#$ $$$.#\n"
+                    +     "#  ..  #\n"
+                    +     "########\n";
+        }
     }
 
     public String getMap() {
